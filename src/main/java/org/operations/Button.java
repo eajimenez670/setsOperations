@@ -21,16 +21,43 @@ public class Button implements ActionListener {
         return button;
     }
 
-    public ArrayList<Pair<Integer, Integer>> isReflexive(ArrayList<Pair<Integer, Integer>> list) {
-        var setsReflexives = new ArrayList<Pair<Integer, Integer>>();
+    public String validateOperations(ArrayList<Pair<Integer, Integer>> list) {
+        var setsReflexive = new ArrayList<Pair<Integer, Integer>>();
+        var setsSymmetric = new ArrayList<Pair<Integer, Integer>>();
+        var setsTransitive = new ArrayList<Pair<Integer, Integer>>();
 
-        for (Pair<Integer, Integer> tuple : list) {
-            if (tuple.getValue0() == tuple.getValue1()) {
-                setsReflexives.add(tuple);
+        for (int i = 0; i < list.size(); i++) {
+            // Validate Reflexive
+            if (list.get(i).getValue0() == list.get(i).getValue1()) {
+                setsReflexive.add(list.get(i));
+            }
+
+            // Validate Symmetric
+            for (int j = 0; j < list.size(); j++) {
+                if (i != j) {
+                    if (list.get(i).getValue0() != list.get(i).getValue1()) {
+                        if ((list.get(i).getValue0() == list.get(j).getValue1()) && (list.get(i).getValue1() == list.get(j).getValue0())) {
+                            if (!setsSymmetric.contains(list.get(i)) && !setsSymmetric.contains(list.get(j))) {
+                                setsSymmetric.add(list.get(i));
+                                setsSymmetric.add(list.get(j));
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        return setsReflexives;
+        String message = "";
+
+        if (setsReflexive.size() > 0) {
+            message += "Las siguientes propiedades son reflexivas: " + getTextMessage(setsReflexive) + "\n";
+        }
+
+        if (setsSymmetric.size() > 0) {
+            message += "Las siguientes propiedades son simetricas: " + getTextMessage(setsSymmetric) + "\n";
+        }
+
+        return message;
     }
 
     public String getTextMessage(ArrayList<Pair<Integer, Integer>> list) {
@@ -46,13 +73,8 @@ public class Button implements ActionListener {
     public boolean validateText(String nodeTrim) {
         boolean isValid = true;
 
-        if (!nodeTrim.startsWith("(") || !nodeTrim.endsWith(")")) {
-            JOptionPane.showMessageDialog(Design.getFrame(), String.format("Debe ingresar los valores entre parentesis y separados por coma"));
-            isValid = false;
-        }
-
-        if (nodeTrim.length() != 5) {
-            JOptionPane.showMessageDialog(Design.getFrame(), String.format("El nodo %s es incorrecto, solo se admiten 2 valores", nodeTrim));
+        if (!nodeTrim.startsWith("(") || !nodeTrim.endsWith(")") || !nodeTrim.contains(",")) {
+            JOptionPane.showMessageDialog(Design.getFrame(), String.format("Debe ingresar 2 valores entre parentesis y separados por coma"));
             isValid = false;
         }
 
@@ -63,7 +85,7 @@ public class Button implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         try {
             String text = Design.getTextField().getText();
-            var sets = text.split(" ");
+            var sets = text.split("\\|");
             var listTuples = new ArrayList<Pair<Integer, Integer>>();
             for (String node : sets) {
                 String nodeTrim = node.trim();
@@ -71,23 +93,18 @@ public class Button implements ActionListener {
                     return;
                 }
 
-                int number1 = Integer.parseInt(nodeTrim.substring(1, 2));
-                int number2 = Integer.parseInt(nodeTrim.substring(nodeTrim.length() - 2, nodeTrim.length() - 1));
-                listTuples.add(new Pair<Integer, Integer>(number1, number2));
+                var numbersSet = nodeTrim.substring(1, nodeTrim.length() - 1).split(",");
+                int num1 = Integer.parseInt(numbersSet[0].trim());
+                int num2 = Integer.parseInt(numbersSet[1].trim());
+                listTuples.add(new Pair<Integer, Integer>(num1, num2));
             }
 
-            String listMessages = "";
+            var message = validateOperations(listTuples);
 
-            var arrayReflexives = isReflexive(listTuples);
-            if (arrayReflexives.size() > 0) {
-                listMessages += "El conjunto es reflexivo: " + getTextMessage(arrayReflexives);
-            }
-
-
-            if (listMessages == "") {
+            if (message == "") {
                 JOptionPane.showMessageDialog(Design.getFrame(), "El conjunto no cuenta con ninguna propiedad");
             } else {
-                JOptionPane.showMessageDialog(Design.getFrame(), listMessages);
+                JOptionPane.showMessageDialog(Design.getFrame(), message);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(Design.getFrame(), "No se admiten letras ni caracteres especiales");

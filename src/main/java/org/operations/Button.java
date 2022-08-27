@@ -7,9 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/*Clase que permite añadir el evento click al botón de validación*/
 public class Button implements ActionListener {
+    // Botón de validación de conjuntos
     private JButton button;
 
+    // Inicializa las propiedades del botón y añade el controlador del evento click
     Button(int x, int y, int width, int height) {
         button = new JButton("Validar");
         button.setBounds(x, y, width, height);
@@ -20,6 +23,9 @@ public class Button implements ActionListener {
         return button;
     }
 
+    /*
+    * Valida las operaciones en conjuntos con datos de tipo Entero
+    * */
     public String validateOperationsInt(ArrayList<Pair<Object, Object>> list) {
         var setsReflexive = new ArrayList<Pair<Object, Object>>();
         var setsSymmetric = new ArrayList<Pair<Object, Object>>();
@@ -78,6 +84,9 @@ public class Button implements ActionListener {
         return generateMessage(setsReflexive, setsSymmetric, setsTransitive);
     }
 
+    /*
+    * Valida las operaciones en elementos con tipos de datos String
+    * */
     public String validateOperationsString(ArrayList<Pair<Object, Object>> list) {
         var setsReflexive = new ArrayList<Pair<Object, Object>>();
         var setsSymmetric = new ArrayList<Pair<Object, Object>>();
@@ -136,6 +145,9 @@ public class Button implements ActionListener {
         return generateMessage(setsReflexive, setsSymmetric, setsTransitive);
     }
 
+    /*
+    * Genera el mensaje resultante que será devuelto al usuario final
+    * */
     public String generateMessage(
             ArrayList<Pair<Object, Object>> setsReflexive,
             ArrayList<Pair<Object, Object>> setsSymmetric,
@@ -168,6 +180,9 @@ public class Button implements ActionListener {
         return message;
     }
 
+    /*
+    * Interpola valores dinámicos al mensaje
+    * */
     public String getTextMessage(ArrayList<Pair<Object, Object>> list) {
         String s = "";
 
@@ -178,6 +193,9 @@ public class Button implements ActionListener {
         return s;
     }
 
+    /*
+    * Valida que sea una tupla válida
+    * */
     public boolean validateText(String nodeTrim) {
         boolean isValid = true;
 
@@ -189,6 +207,9 @@ public class Button implements ActionListener {
         return isValid;
     }
 
+    /*
+    * Método principal que se encarga de validar las operaciones entre conjuntos
+    * */
     public void execute(String text, int type) {
         var sets = text.split("\\|");
         var listTuples = new ArrayList<Pair<Object, Object>>();
@@ -231,6 +252,9 @@ public class Button implements ActionListener {
         }
     }
 
+    /*
+    * Evento click del botón principal
+    * */
     @Override
     public void actionPerformed(ActionEvent e) {
         try {

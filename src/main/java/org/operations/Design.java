@@ -2,14 +2,21 @@ package org.operations;
 
 import javax.swing.*;
 
+/*Clase destinada al diseño de la interfaz de la aplicación*/
 public class Design extends JFrame {
+    // Ventana principal de la aplicación
     private static JFrame frame;
+    // Caja de texto principal
     private static JTextField textField;
+    // Etiqueta que acompaña a la caja de texto principal
     private static JLabel label;
+    // Etiqueta que acompaña al label de la caja de selección
     private static JLabel labelCB;
+    // Caja de selección del tipo de dato
     private static JComboBox comboBox;
 
     Design() {
+        // Se inicialazon los valores de las propiedades y se añaden a la ventana principal
         setTitle("Propiedades de las relaciones entre conjuntos");
         InitializeLabelCB(50, 20, 150, 20);
         InitializeComboBox(50, 40, 150, 20);
